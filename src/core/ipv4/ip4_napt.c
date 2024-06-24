@@ -754,7 +754,7 @@ ip_napt_recv(struct pbuf *p, struct ip_hdr *iphdr)
   struct ip_portmap_entry *m;
 #endif
   struct ip_napt_entry *t;
-  
+
   if (ip_napt_max == 0) return;
 
 #if LWIP_ICMP
@@ -863,6 +863,8 @@ ip_napt_forward(struct pbuf *p, struct ip_hdr *iphdr, struct netif *inp, struct 
 #if LWIP_ICMP
   /* NAPT for ICMP Echo Request using identifier */
   if (IPH_PROTO(iphdr) == IP_PROTO_ICMP) {
+    // block ICMP from being forwarded to the parents
+    // return ERR_RTE;
     struct icmp_echo_hdr *iecho = (struct icmp_echo_hdr *)((u8_t *)p->payload + IPH_HL(iphdr) * 4);
     if (iecho->type == ICMP_ECHO) {
       /* register src addr and iecho->id and dest info */
